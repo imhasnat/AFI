@@ -87,12 +87,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
       if (isAllFine) {
         // Save Data
-        document.querySelector(".SaveDataSC").click();
         const resData = await saveBusinessSC("coverage_history_form", "submit");
         if (!resData || !resData.QuoteId || resData.QuoteId <= 0) return false;
 
         // Go to Thank You Page
-        // window.location.href = businessSuccessRedirectionSC;
+        document.querySelector(".SaveDataSC")?.click();
       }
     }
 
@@ -134,7 +133,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ********** MULTI-STEP 3 Validation ***********
   function policyCoverageOptionsSC() {
-    // const typeOfInsurance = document.getElementsByName("typeOfInsurance");
     const typeOfInsurance = document.querySelectorAll(
       '.cover_options_wrapper .field__input[data-sc-field-name="typeOfInsurance"]'
     );
@@ -158,17 +156,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ******************* policyCoverageOptionsSC Disable *******************
   function policyCoverageOptionsSCDisable(disableStatus) {
-    // const fieldGroups = document.querySelectorAll(
-    //   ".cover_options_wrapper .field-group"
-    // );
-    // fieldGroups.forEach((group) => {
-    //   const field = group.querySelector("input");
-    //   const label = group.querySelector("label");
-
-    //   field.disabled = disableStatus;
-    //   label.style.opacity = disableStatus ? "0.5" : "1";
-    // });
-
     const fieldInputs = document.querySelectorAll(
       ".cover_options_wrapper .field__input"
     );
@@ -193,9 +180,12 @@ btnNext.type = "button";
 btnNext.className = "button button__next button__right businessNextBtnSC";
 btnNext.textContent = "Next";
 
-document
-  .querySelector(".quote_request__action_buttons.business_sitecore .container")
-  .appendChild(btnBack);
-document
-  .querySelector(".quote_request__action_buttons.business_sitecore .container")
-  .appendChild(btnNext);
+const quoteReqBtn = document.querySelector(
+  ".quote_request__action_buttons.business_sitecore .container"
+);
+
+quoteReqBtn?.appendChild(btnBack);
+quoteReqBtn?.appendChild(btnNext);
+
+// document.querySelector('.button__back.button__left').classList.add('businessBackBtnSC')
+// document.querySelector('.button__next.button__right').classList.add('businessNextBtnSC')
