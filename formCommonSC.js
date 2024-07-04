@@ -1256,3 +1256,21 @@ document
       }
     });
   });
+
+// Custom Button added on the SITECORE FROM
+const btnBack = document.createElement("button");
+btnBack.type = "button";
+btnBack.className = "button button__back button__left hide";
+btnBack.textContent = "Back";
+
+const btnNext = document.createElement("button");
+btnNext.type = "button";
+btnNext.className = "button button__next button__right";
+btnNext.textContent = "Next";
+
+const quoteReqBtn = document.querySelector(
+  ".quote_request__action_buttons.business_sitecore .container"
+);
+
+quoteReqBtn?.appendChild(btnBack);
+quoteReqBtn?.appendChild(btnNext);
