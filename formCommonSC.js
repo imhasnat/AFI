@@ -101,16 +101,14 @@ document.querySelectorAll(".field__input.numberOnly")?.forEach((input) => {
 });
 
 // Input Alphabet Only
-document
-  .querySelectorAll(".field__input.alphabeticOnlySC")
-  ?.forEach((input) => {
-    input.addEventListener("input", (e) => {
-      e.target.value = e.target?.value.replace(
-        /[^a-zA-Z\s\-!#$%^&*()_+=[\]{}|;:'",.<>?`~]+/g,
-        ""
-      ); // /[^a-zA-z]/g
-    });
+document.querySelectorAll(".field__input.alphabeticOnly")?.forEach((input) => {
+  input.addEventListener("input", (e) => {
+    e.target.value = e.target?.value.replace(
+      /[^a-zA-Z\s\-!#$%^&*()_+=[\]{}|;:'",.<>?`~]+/g,
+      ""
+    ); // /[^a-zA-z]/g
   });
+});
 
 // Input Alphabet Only
 document.querySelectorAll(".field__input.typeAlphabetic")?.forEach((input) => {
@@ -500,7 +498,7 @@ function validateFormSC(formClassName, dataAssign = true) {
     { class: "zip", validator: zipValidator },
     { class: "email", validator: emailValidationSC },
     { class: "phone", validator: phoneValidationSC },
-    { class: "alphabeticOnlySC", validator: alphabeticOnlySC },
+    { class: "alphabeticOnly", validator: alphabeticOnlySC },
     { class: "requiredxs", validator: isValueEmptySC },
   ];
 
@@ -657,11 +655,12 @@ function awaitedFieldSC(el, disability) {
 // *********************************************
 //      Household Violations FUNCTIONALITY
 // *********************************************
-const addViolationBtnSC = document.getElementById("add_violation_btn");
+const addViolationBtnSC =
+  document.getElementsByClassName("add_violation_btn")[0];
 const violationsFieldsSC = document.querySelector(".violation_info_fields");
-const violationWrapperSC = document.getElementById(
+const violationWrapperSC = document.getElementsByClassName(
   "violation_info_fields_wrapper"
-);
+)[0];
 
 let vioSerialSC = 0;
 
@@ -678,7 +677,7 @@ addViolationBtnSC?.addEventListener("click", function () {
     field.id = field.name = newId;
 
     // Driver name alphabetical only
-    if (field.classList.contains("alphabeticOnlySC")) {
+    if (field.classList.contains("alphabeticOnly")) {
       field.addEventListener("input", (e) => {
         e.target.value = e.target?.value.replace(
           /[^a-zA-Z\s\-!#$%^&*()_+=[\]{}|;:'",.<>?`~]+/g,
@@ -728,7 +727,7 @@ const getViolationsValueSC = () => {
 };
 
 // Get every violation Radio field's value
-hasviolationsFieldsSC.forEach((fields) => {
+hasviolationsFieldsSC?.forEach((fields) => {
   fields?.addEventListener("change", () => {
     let getValue = getViolationsValueSC();
 
@@ -836,10 +835,12 @@ function accordionFuncSC() {
 // *********************************************
 
 function propertyClamsFuncSC() {
-  const propertyClaimsCount = document.getElementById("propertyClaimsCount");
-  const propertyClaimsDetails = document.getElementById(
+  const propertyClaimsCount = document.getElementsByClassName(
+    "propertyClaimsCount"
+  )[0];
+  const propertyClaimsDetails = document.getElementsByClassName(
     "propertyClaimsDetails"
-  );
+  )[0];
   if (!propertyClaimsCount || !propertyClaimsDetails) return;
 
   // if (propertyClaimsCount.value == "" || propertyClaimsCount.value == "0") {
@@ -866,9 +867,9 @@ function builtYearFunctionalitySC() {
   var currentYear = new Date().getFullYear();
 
   // Generate options for the dropdowns
-  var dropdown = $("#propertyYearBuilt");
-  var dropdown_1 = $("select#vehicle0Year");
-  var vehiclePurchased = $("select#vehicle0YearPurchased");
+  var dropdown = $(".propertyYearBuilt");
+  var dropdown_1 = $("select.vehicle0Year");
+  var vehiclePurchased = $("select.vehicle0YearPurchased");
 
   var optionBefore1900 = $("<option></option>")
     .attr("value", "before1900")
@@ -996,7 +997,6 @@ async function saveDataSC(
   action,
   addressValidType
 ) {
-  debugger;
   // clean the payload by removing disabled fields data
   ActiveFormcleanValueIfDisabledSC(cForm);
 
