@@ -91,7 +91,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (!resData || !resData.QuoteId || resData.QuoteId <= 0) return false;
 
         // Go to Thank You Page
-        document.querySelector(".SaveDataSC")?.click();
+        // FormCommon line no 1066
       }
     }
 

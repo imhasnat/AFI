@@ -243,6 +243,56 @@ function currencyFieldFuncSC() {
   });
 }
 
+// Bussiness form only: Add Choose One option in the Select filed Dropdown
+function addOptionSC(field) {
+  if (field) {
+    const option = document.createElement("option");
+    if (field.dataset.scFieldName == "policyHolderPhoneType") {
+      option.text = "--";
+    } else {
+      option.text = "Choose One";
+    }
+    option.value = "";
+    option.setAttribute("selected", "selected");
+    field.prepend(option);
+  }
+}
+
+// Add Choose One or Hyphen option in the Select filed Dropdown
+function addOptSC(fields, bool) {
+  if (fields) {
+    fields.forEach((ele) => {
+      const option = document.createElement("option");
+      if (bool) option.text = "--";
+      else option.text = "Choose One";
+      option.value = "";
+      option.setAttribute("selected", "selected");
+      ele.prepend(option);
+    });
+  }
+}
+
+// Add Option in the Select filed Dropdown
+function addSelectDropdownOptSC() {
+  // Business Form
+  const branchService = document.querySelector(".branchOfService");
+  const militaryStatus = document.querySelector(".militaryStatus");
+  const policyHolderPhone = document.querySelector(".policyHolderPhoneType");
+  const currentInsuranceCompany = document.querySelector(
+    ".currentInsuranceCompany"
+  );
+  addOptionSC(branchService);
+  addOptionSC(militaryStatus);
+  addOptionSC(policyHolderPhone);
+  addOptionSC(currentInsuranceCompany);
+
+  // For All Forms
+  const chooseSC = document.querySelectorAll(".chooseSC");
+  const hyphenSC = document.querySelectorAll(".hyphenSC");
+  addOptSC(hyphenSC, true);
+  addOptSC(chooseSC, false);
+}
+
 // Date Validation
 const thisYearSC = new Date().getFullYear();
 function dateValidationSC(field, getMaxYear = thisYearSC) {
@@ -839,6 +889,30 @@ function builtYearFunctionalitySC() {
   vehiclePurchased.append(optionBefore1900.clone());
 }
 
+// clear fields at the page load
+function clearFieldsOnTheBeginning() {
+  const allFields = document.querySelectorAll(".field__input");
+  allFields.forEach((field) => {
+    if (field.type === "checkbox") {
+      field.checked = false;
+    } else {
+      field.value = "";
+    }
+  });
+
+  const radioFields = document.querySelectorAll(".fIeld__radio input");
+  radioFields.forEach((field) => {
+    if (field.type === "radio") {
+      field.checked = false;
+    }
+  });
+}
+
+// Clear the fields only if the page was restored from the cache
+// window.addEventListener("pageshow", () => {
+//   clearFieldsOnTheBeginning();
+// });
+
 window.addEventListener("load", (e) => {
   propertyClamsFuncSC();
   removeErrorOnChangeSC();
@@ -848,6 +922,7 @@ window.addEventListener("load", (e) => {
   currencyFieldFuncSC();
   phoneNumberPatternSC();
   builtYearFunctionalitySC();
+  addSelectDropdownOptSC();
 });
 
 // *********************************************
@@ -921,6 +996,7 @@ async function saveDataSC(
   action,
   addressValidType
 ) {
+  debugger;
   // clean the payload by removing disabled fields data
   ActiveFormcleanValueIfDisabledSC(cForm);
 
@@ -1062,8 +1138,11 @@ async function saveDataSC(
 
     // clear all fields if submit success
     if (action === "submit" && jsonData?.QuoteId) {
-      const allFields = document.querySelectorAll(".field__input");
+      // Save Data in the Sitecore then Redirect to Thank you page
+      document.querySelector(".SaveDataSC")?.click();
 
+      // clear fields
+      const allFields = document.querySelectorAll(".field__input");
       allFields.forEach((field) => {
         if (field.type !== "radio" && field.type !== "checkbox") {
           field.value = "";
@@ -1231,10 +1310,10 @@ function btnSubmittingSC(isSubmitting) {
   }
 }
 
-// Eligibility For Insurance: Checked filed highlighter & Remove the error msg
+// Eligibility For Insurance: Checked field highlighter & Remove the error msg
 document
   .querySelectorAll(".radio__form_section .fIeld__radio")
-  .forEach((field) => {
+  ?.forEach((field) => {
     field.addEventListener("click", () => {
       const haveCheckClass = document.querySelector(
         ".radio__form_section .fIeld__radio.checked"
@@ -1257,6 +1336,35 @@ document
     });
   });
 
+// Add data-match attribute to the specifice fields
+const policyMail = document.querySelector(
+  ".field__input.policyHolderMailingAddress"
+);
+const policyCity = document.querySelector(".field__input.policyHolderCity");
+const policyState = document.querySelector(".field__input.policyHolderState");
+const policyZip = document.querySelector(".field__input.policyHolderZip");
+policyMail?.setAttribute("data-match", "address");
+policyCity?.setAttribute("data-match", "city");
+policyState?.setAttribute("data-match", "state");
+policyZip?.setAttribute("data-match", "zip");
+
+const prtyAddress = document.querySelector(".field__input.propertyAddress");
+const prtyCity = document.querySelector(".field__input.propertyCity");
+const prtyState = document.querySelector(".field__input.propertyState");
+const prtyZip = document.querySelector(".field__input.propertyZip");
+prtyAddress?.setAttribute("data-match", "address");
+prtyCity?.setAttribute("data-match", "city");
+prtyState?.setAttribute("data-match", "state");
+prtyZip?.setAttribute("data-match", "zip");
+
+// initailly disbled howManyLossesHaveOccurred input field
+const fieldDisabledSC = document.querySelectorAll(".field_disabledSC");
+if (fieldDisabledSC) {
+  fieldDisabledSC.forEach((ele) => {
+    ele.disabled = true;
+  });
+}
+
 // Custom Button added on the SITECORE FROM
 const btnBack = document.createElement("button");
 btnBack.type = "button";
@@ -1269,7 +1377,7 @@ btnNext.className = "button button__next button__right";
 btnNext.textContent = "Next";
 
 const quoteReqBtn = document.querySelector(
-  ".quote_request__action_buttons.business_sitecore .container"
+  ".form__section__container .quote_request__action_buttons .container"
 );
 
 quoteReqBtn?.appendChild(btnBack);
