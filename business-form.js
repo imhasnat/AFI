@@ -1,11 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   // Forms
-  const businessFormSteps = [
-    "policyholder_form",
-    "business_information",
-    "policy_coverage_options",
-    "coverage_history_form",
-  ];
+  const businessFormSteps = ["policyholder_form", "business_information", "policy_coverage_options", "coverage_history_form"];
 
   // *********************************************
   //       FORM SUBMISSION AND STEP HANDLING
@@ -57,11 +52,7 @@ window.addEventListener("DOMContentLoaded", () => {
       // Save Data
       formData.IsStepOne = true; // contact info is here
 
-      const resData = await saveBusiness(
-        "business_information",
-        "send",
-        "business"
-      );
+      const resData = await saveBusiness("business_information", "send", "business");
       // const resData = await saveBusiness("business_information");
       if (!resData || !resData.QuoteId || resData.QuoteId <= 0) return false;
     }
@@ -111,14 +102,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   async function saveBusiness(form, action = "send", addressValid = null) {
-    const resData = await saveData(
-      "/sc-api/forms/save-business",
-      formData,
-      businessNextBtn,
-      form,
-      action,
-      addressValid
-    );
+    const resData = await saveData("/sc-api/forms/save-business", formData, businessNextBtn, form, action, addressValid);
 
     return resData;
   }
@@ -154,9 +138,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // ******************* policyCoverageOptions Disable *******************
   function policyCoverageOptionsDisable(disableStatus) {
-    const fieldGroups = document.querySelectorAll(
-      ".cover_options_wrapper .field-group"
-    );
+    const fieldGroups = document.querySelectorAll(".cover_options_wrapper .field-group");
     fieldGroups.forEach((group) => {
       const field = group.querySelector("input");
       const label = group.querySelector("label");

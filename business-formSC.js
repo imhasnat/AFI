@@ -55,14 +55,13 @@ window.addEventListener("DOMContentLoaded", () => {
       if (!validateFormSC("business_information")) return false;
 
       // Save Data
-      formDataSC.IsStepOne = true; // contact info is here
+      formDataSC.IsStepOne = true;
 
       const resData = await saveBusinessSC(
         "business_information",
         "send",
         "business"
       );
-      // const resData = await saveBusinessSC("business_information");
       if (!resData || !resData.QuoteId || resData.QuoteId <= 0) return false;
     }
 
@@ -89,7 +88,6 @@ window.addEventListener("DOMContentLoaded", () => {
         // Save Data
         const resData = await saveBusinessSC("coverage_history_form", "submit");
         if (!resData || !resData.QuoteId || resData.QuoteId <= 0) return false;
-
         // Go to Thank You Page
         // FormCommon line no 1066
       }
@@ -169,10 +167,10 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Bussiness Form Button Class added on the button
+// Bussiness Form: Class added on the Button
 document
-  .querySelector(".button__back.button__left")
+  .querySelector(".business_sitecore .button__back.button__left")
   ?.classList.add("businessBackBtnSC");
 document
-  .querySelector(".button__next.button__right")
+  .querySelector(".business_sitecore .button__next.button__right")
   ?.classList.add("businessNextBtnSC");

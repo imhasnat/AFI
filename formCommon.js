@@ -1,6 +1,4 @@
-var businessSuccessRedirectionSC = "/Quote-Forms-Save-Success";
-
-let formDataSC = {
+let formData = {
   StartDate: Date.now(),
   submitQuoteContactMethod: "Email",
   firstCommandAdvisorName: null,
@@ -15,21 +13,19 @@ let formDataSC = {
   IsStepOne: true,
 };
 
-let formListSC = ["radio_select"];
+let formList = ["radio_select"];
 // *********************************************
 //           SHOW FORM BY CONDITION
 // *********************************************
-function showActiveFormSC(step, backBtn) {
+function showActiveForm(step, backBtn) {
   // console.log({ step });
-  // console.log(formDataSC);
+  // console.log(formData);
 
   // remove active_section class from everywhere
   document.querySelector(".active_section")?.classList.remove("active_section");
 
   // set active_section class
-  document
-    .querySelector(`.${formListSC[step]}`)
-    ?.classList.add("active_section");
+  document.querySelector(`.${formList[step]}`)?.classList.add("active_section");
 
   // Conditionally Hide Back Btn
   step <= 0
@@ -42,7 +38,7 @@ function showActiveFormSC(step, backBtn) {
 // *********************************************
 
 // Error Message if value user makes any mistake
-function eligibilityErrorMessageSC(data, selector) {
+function eligibilityErrorMessage(data, selector) {
   const errorDiv = document.querySelector(selector);
 
   if (!data) {
@@ -53,7 +49,7 @@ function eligibilityErrorMessageSC(data, selector) {
 }
 
 // Show error Message if value user makes any mistake
-function inputErrorMessageSC(selector, msg) {
+function inputErrorMessage(selector, msg) {
   const hasErrorField =
     selector?.parentElement?.querySelector(".field_message");
 
@@ -75,18 +71,18 @@ function inputErrorMessageSC(selector, msg) {
 }
 
 // Check is input value is correct
-function isValueEmptySC(selector) {
+function isValueEmpty(selector) {
   const value = String(selector?.value).trim();
 
   if (!value) {
-    inputErrorMessageSC(selector, "This field is required");
+    inputErrorMessage(selector, "This field is required");
     return false;
   }
 
   const isValueStrNull = String(value).toLocaleLowerCase() == "null";
 
   if (isValueStrNull) {
-    inputErrorMessageSC(selector, "Input valid value");
+    inputErrorMessage(selector, "Input valid value");
     return false;
   }
 
@@ -121,7 +117,7 @@ document.querySelectorAll(".field__input.typeAlphabetic")?.forEach((input) => {
 });
 
 // Alphabetic only
-function alphabeticOnlySC(selector) {
+function alphabeticOnly(selector) {
   const letterRegEx = /[a-zA-Z\s\-!#$%^&*()_+=[\]{}|;:'",.<>?`~]+/g;
   // const letterRegEx = /^[A-Za-z]+$/;
   const isMatched = letterRegEx.test(selector?.value);
@@ -129,15 +125,15 @@ function alphabeticOnlySC(selector) {
   if (isMatched) {
     return true;
   } else {
-    inputErrorMessageSC(selector, "Please enter alphabetic characters only");
+    inputErrorMessage(selector, "Please enter alphabetic characters only");
     return false;
   }
 }
 
 // Minimum value need
-function minValueSC(selector, minValueSC = 5, msg) {
-  if (selector?.value.length != minValueSC) {
-    inputErrorMessageSC(selector, msg);
+function minValue(selector, minValue = 5, msg) {
+  if (selector?.value.length != minValue) {
+    inputErrorMessage(selector, msg);
     return false;
   } else {
     return true;
@@ -145,38 +141,38 @@ function minValueSC(selector, minValueSC = 5, msg) {
 }
 
 // Email validation
-function emailValidationSC(selector) {
+function emailValidation(selector) {
   const regEx =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (regEx.test(selector?.value)) {
     return true;
   } else {
-    inputErrorMessageSC(selector, "Please enter a valid email address");
+    inputErrorMessage(selector, "Please enter a valid email address");
     return false;
   }
 }
 
 // Phone Number validation
-function phoneValidationSC(selector) {
+function phoneValidation(selector) {
   const regEx = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
 
   if (regEx.test(selector?.value)) {
     if (String(selector?.value)[1] == 0 || String(selector?.value)[1] == 1) {
-      inputErrorMessageSC(selector, "First digit cannot be 0 or 1.");
+      inputErrorMessage(selector, "First digit cannot be 0 or 1.");
       return false;
     }
 
     return true;
   } else {
-    inputErrorMessageSC(selector, "Please enter a valid phone number");
+    inputErrorMessage(selector, "Please enter a valid phone number");
     return false;
   }
 }
 
 // Phone Number Pattern
-function phoneNumberPatternSC(selector) {
+function phoneNumberPattern(selector) {
   if (!selector) {
-    selector = document.getElementsByClassName("policyHolderPhoneNumber")[0];
+    selector = document.getElementById("policyHolderPhoneNumber");
   }
 
   selector?.addEventListener("input", (e) => {
@@ -213,184 +209,113 @@ function phoneNumberPatternSC(selector) {
 
 // Social Security Number Pattern
 // document.querySelectorAll(".SSN").forEach((field) => {
-//   let value, valueHyphen, ssnVal, valLen, Xmask;
-
 //   field.addEventListener("input", (e) => {
-//     value = e.target.value;
 //     var x = e.target.value
 //       .replace(/\D/g, "")
 //       .match(/(\d{0,3})(\d{0,2})(\d{0,4})/);
-//     valueHyphen = !x[2] ? x[1] : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
-//     e.target.value = valueHyphen;
-//     ssnVal = e.target.value.slice(7, 11);
-//     valLen = e.target.value.length;
-//     Xmask = "XXX-XX-XXXX".slice(0, valLen);
-//   });
-
-//   field.addEventListener("blur", (e) => {
-//     if (e.target.value.length > 7) {
-//       field.value = valLen < 7 ? Xmask : "XXX-XX-" + ssnVal;
-//     } else if (e.target.value.length < 7) {
-//       field.value = value.replace(/\d/g, "X");
-//     }
-//   });
-
-//   field.addEventListener("focus", (e) => {
-//     if (e.target.value.length > 0) {
-//       field.value = value;
-//     }
+//     e.target.value = !x[2]
+//       ? x[1]
+//       : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
 //   });
 // });
 
-// businessTaxId  Number Pattern
-document.querySelectorAll(".businessTaxId ").forEach((field) => {
+function setSSNValue(selector, value) {
+  if (value !== undefined) {
+    document.querySelector(selector).value = value;
+  }
+}
+
+// Social Security Number Pattern & Mask
+document.querySelectorAll(".SSN").forEach((field) => {
+  let value, valueHyphen, ssnVal, valLen, Xmask;
+
   field.addEventListener("input", (e) => {
+    value = e.target.value;
     var x = e.target.value
       .replace(/\D/g, "")
       .match(/(\d{0,3})(\d{0,2})(\d{0,4})/);
-    e.target.value = !x[2]
-      ? x[1]
-      : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
+    valueHyphen = !x[2] ? x[1] : x[1] + "-" + x[2] + (x[3] ? "-" + x[3] : "");
+    e.target.value = valueHyphen;
+    ssnVal = e.target.value.slice(7, 11);
+    valLen = e.target.value.length;
+    Xmask = "XXX-XX-XXXX".slice(0, valLen);
+
+    if (field.classList.contains("policySSN")) {
+      setSSNValue(".policySSNVal", valueHyphen);
+    } else if (field.classList.contains("spouseSSN")) {
+      setSSNValue(".spouseSSNVal", valueHyphen);
+    } else if (field.classList.contains("driverSSN")) {
+      const driveID = document.querySelector(".driverSSN").name;
+      setSSNValue(`#${driveID}`, valueHyphen);
+    }
+  });
+
+  field.addEventListener("blur", (e) => {
+    if (field.classList.contains("driverSSN")) {
+      const driveID = document.querySelector(".driverSSN").name;
+      const driverValue = document.querySelector(`#${driveID}`).value;
+      const sliceValue = driverValue.slice(7, 11);
+      const driveValLen = driverValue.length;
+      const driveMask = "XXX-XX-XXXX".slice(0, driveValLen);
+
+      if (driverValue.length > 7 && driverValue) {
+        field.value = driveValLen < 7 ? driveMask : "XXX-XX-" + sliceValue;
+      } else if (driverValue.length < 7 && driverValue) {
+        field.value = driverValue?.replace(/\d/g, "X");
+      }
+    } else if (e.target.value.length > 7 && value) {
+      field.value = valLen < 7 ? Xmask : "XXX-XX-" + ssnVal;
+    } else if (e.target.value.length < 7 && value) {
+      field.value = value?.replace(/\d/g, "X");
+    }
+  });
+
+  field.addEventListener("focus", (e) => {
+    if (field.classList.contains("driverSSN")) {
+      const driveID = document.querySelector(".driverSSN").name;
+      const driverValue = document.querySelector(`#${driveID}`).value;
+      field.value = driverValue;
+    } else if (e.target.value.length > 0 && value) {
+      field.value = value;
+    }
   });
 });
 
 // Validate Social Security Number if there is a value in the field
-function ssnValidatorSC(selector) {
+function ssnValidator(selector) {
   if (!selector || !selector.value) {
     return true;
   }
-  const cleanedValue = selector.value.replace(/-/g, "");
+  const cleanedValue = selector.value?.replace(/-/g, "");
+
   if (cleanedValue.length !== 9) {
-    inputErrorMessageSC(selector, "There should be 9 digits");
+    inputErrorMessage(selector, "There should be 9 digits");
     return false;
   }
   return true;
 }
 
-// Validate Website URL if there is a value in the field
-function webURLValidator(selector) {
-  if (!selector || !selector.value) {
-    return true;
-  }
-
-  const urlPattern = new RegExp(
-    "^" +
-      "(?:(?:https?|ftp)://)?" +
-      "(?:\\S+(?::\\S*)?@)?" +
-      "(?:" +
-      "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-      "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-      "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
-      "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-      "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-      "(?:\\.(?:[0-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-5]))" +
-      "|" +
-      "(?:(?:[a-zA-Z\\d])(?:[a-zA-Z\\d-]{0,61}[a-zA-Z\\d])?\\.)+(?:[a-zA-Z\\d-]{2,})" +
-      ")" +
-      "(?::\\d{2,5})?" +
-      "(?:/[^\\s]*)?" +
-      "$",
-    "i"
-  );
-  let urlValue = selector.value.trim();
-
-  // Remove 'www.' from the beginning if present
-  if (urlValue.toLowerCase().startsWith("www.")) {
-    urlValue = urlValue.slice(4);
-  }
-
-  if (urlPattern.test(urlValue)) {
-    return true;
-  } else {
-    inputErrorMessage(selector, "Please enter a valid URL");
-    return false;
-  }
-}
-
 // Dollar Field Pattern
-function currencyFieldFuncSC() {
+function currencyFieldFunc() {
   const dollarField = document.querySelectorAll(".field__input.dollar");
 
   dollarField?.forEach((field) => {
     field?.addEventListener("input", (e) => {
-      // Remove all non-digit characters
-      let numericValue = e.target.value.replace(/\D/g, "");
+      if (e.target.value) {
+        let modifiedValue = e.target.value
+          .toString()
+          .replace(/\D/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-      if (numericValue) {
-        let modifiedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         e.target.value = `$${modifiedValue}`;
-      } else {
-        e.target.value = "";
       }
     });
   });
-}
-
-function removeDollarSC() {
-  const dollarField = document.querySelectorAll(".field__input.dollar");
-  dollarField?.forEach((field) => {
-    field?.addEventListener("keyup", (e) => {
-      if (e.target.value == "$") {
-        e.target.value = "";
-      }
-    });
-  });
-}
-removeDollarSC();
-
-// Business form only: Add Choose One option in the Select filed Dropdown
-function addOptionSC(field) {
-  if (field) {
-    const option = document.createElement("option");
-    if (field.dataset.scFieldName == "policyHolderPhoneType") {
-      option.text = "--";
-    } else {
-      option.text = "Choose One";
-    }
-    option.value = "";
-    option.setAttribute("selected", "selected");
-    field.prepend(option);
-  }
-}
-
-// Add Choose One or Hyphen option in the Select filed Dropdown
-function addOptSC(fields, bool) {
-  if (fields) {
-    fields.forEach((ele) => {
-      const option = document.createElement("option");
-      if (bool) option.text = "--";
-      else option.text = "Choose One";
-      option.value = "";
-      option.setAttribute("selected", "selected");
-      ele.prepend(option);
-    });
-  }
-}
-
-// Add Option in the Select filed Dropdown
-function addSelectDropdownOptSC() {
-  // Business Form
-  const branchService = document.querySelector(".branchOfService");
-  const militaryStatus = document.querySelector(".militaryStatus");
-  const policyHolderPhone = document.querySelector(".policyHolderPhoneType");
-  const currentInsuranceCompany = document.querySelector(
-    ".currentInsuranceCompany"
-  );
-  addOptionSC(branchService);
-  addOptionSC(militaryStatus);
-  addOptionSC(policyHolderPhone);
-  addOptionSC(currentInsuranceCompany);
-
-  // For All Forms
-  const chooseSC = document.querySelectorAll(".chooseSC");
-  const hyphenSC = document.querySelectorAll(".hyphenSC");
-  addOptSC(hyphenSC, true);
-  addOptSC(chooseSC, false);
 }
 
 // Date Validation
-const thisYearSC = new Date().getFullYear();
-function dateValidationSC(field, getMaxYear = thisYearSC) {
+const thisYear = new Date().getFullYear();
+function dateValidation(field, getMaxYear = thisYear) {
   field?.addEventListener("input", (e) => {
     let value = e.target.value
       .replace(/\D/g, "")
@@ -431,10 +356,10 @@ function dateValidationSC(field, getMaxYear = thisYearSC) {
       : value[1] + "/" + value[2] + (value[3] ? "/" + value[3] : "");
   });
 }
-document.querySelectorAll(".DOB").forEach((el) => dateValidationSC(el));
-document.querySelectorAll(".date").forEach((el) => dateValidationSC(el));
+document.querySelectorAll(".DOB").forEach((el) => dateValidation(el));
+document.querySelectorAll(".date").forEach((el) => dateValidation(el));
 
-function calculateAgeSC(date) {
+function calculateAge(date) {
   birthDate = new Date(date);
   otherDate = new Date();
 
@@ -458,11 +383,14 @@ document.querySelectorAll(".field__input.year")?.forEach((input) => {
   });
 });
 
-const isAdultSC = (field) => {
-  const result = calculateAgeSC(field?.value) >= 18;
+const isAdult = (field) => {
+  const result = calculateAge(field?.value) >= 18;
 
   if (!result) {
-    inputErrorMessageSC(field, "Age must be 18 years or older to continue");
+    inputErrorMessage(
+      field,
+      "Primary policyholder must be 18 years or older to continue"
+    );
     return false;
   } else {
     return true;
@@ -472,7 +400,7 @@ const isAdultSC = (field) => {
 //            COMMON FUNCTIONALITIES
 // *********************************************
 // KeyPress only remove field Error Message
-function removeErrorOnChangeSC() {
+function removeErrorOnChange() {
   document
     .querySelectorAll(".form_container .field")
     ?.forEach((fieldWrapper) => {
@@ -489,8 +417,25 @@ function removeErrorOnChangeSC() {
     });
 }
 
+function removeSSNErrorOnChange() {
+  document
+    .querySelectorAll(".form_container .field")
+    ?.forEach((fieldWrapper) => {
+      const removeFieldError = () => {
+        const errorField = fieldWrapper?.querySelector(".field_message");
+        errorField?.classList.remove("error");
+      };
+
+      fieldWrapper
+        ?.querySelectorAll(".form-control.SSN")
+        .forEach((inputField) =>
+          inputField?.addEventListener("input", removeFieldError)
+        );
+    });
+}
+
 // Press Enter Submit Form
-function pressEnterToSubmitSC(nextBtn) {
+function pressEnterToSubmit(nextBtn) {
   // if (!nextBtn) nextBtn = document.querySelector(".quote_request__action_buttons .button__next.button__right");
 
   document.querySelectorAll(".field__input")?.forEach((input) => {
@@ -506,7 +451,7 @@ function pressEnterToSubmitSC(nextBtn) {
 }
 
 // common function to remove error message
-function removeErrorOnDisabledSC(field) {
+function removeErrorOnDisabled(field) {
   // clean value
   // field.value = "";
 
@@ -515,16 +460,16 @@ function removeErrorOnDisabledSC(field) {
   if (errorMessage) errorMessage.remove();
 }
 
-// Function for Clean data and property from formDataSC if it disabled
-function cleanValueIfDisabledSC(field) {
+// Function for Clean data and property from formData if it disabled
+function cleanValueIfDisabled(field) {
   if (field.disabled) {
-    if (formDataSC[field.name]) delete formDataSC[field.name];
+    if (formData[field.name]) delete formData[field.name];
   }
 
   return field.disabled; // is field disabled
 }
 
-function ActiveFormcleanValueIfDisabledSC(activeForm) {
+function ActiveFormCleanValueIfDisabled(activeForm) {
   const avoidForms = ["property_quoted_form", "add_vehicle_form"];
   const hasAvoidForm = avoidForms.includes(activeForm);
   if (hasAvoidForm) return;
@@ -532,37 +477,37 @@ function ActiveFormcleanValueIfDisabledSC(activeForm) {
   const disabledFields = document.querySelectorAll(
     ".active_section .field__input:disabled"
   );
-  disabledFields?.forEach((field) => cleanValueIfDisabledSC(field));
+  disabledFields?.forEach((field) => cleanValueIfDisabled(field));
 }
 
 // *********************************************
 //             Eligibility Validation
 // *********************************************
-function eligibilityValidationSC(forms = []) {
+function eligibilityValidation(forms = []) {
   const eligibilityStatus = document.querySelector(
-    'input[data-sc-field-name="eligibilityStatus"]:checked'
+    'input[name="eligibilityStatus"]:checked'
   )?.value;
 
-  // Select formListSC as user eligibilityStatus
+  // Select Formlist as user eligibilityStatus
   if (Boolean(eligibilityStatus)) {
     if (eligibilityStatus === "military") {
-      formListSC = ["radio_select", "military_information", ...forms];
+      formList = ["radio_select", "military_information", ...forms];
     } else if (eligibilityStatus === "child") {
-      formListSC = ["radio_select", "parent_information", ...forms];
+      formList = ["radio_select", "parent_information", ...forms];
     } else if (eligibilityStatus === "parent") {
-      formListSC = ["radio_select", "child_information", ...forms];
+      formList = ["radio_select", "child_information", ...forms];
     } else {
-      formListSC = ["radio_select", ...forms];
+      formList = ["radio_select", ...forms];
     }
-    // maxStep = formListSC?.length - 1;
+    // maxStep = formList?.length - 1;
 
-    // set eligibilityStatus to formDataSC
-    formDataSC.eligibilityStatus = eligibilityStatus;
+    // set eligibilityStatus to formData
+    formData.eligibilityStatus = eligibilityStatus;
   }
 
   // Error Message if value = null
-  eligibilityErrorMessageSC(
-    formDataSC.eligibilityStatus,
+  eligibilityErrorMessage(
+    formData.eligibilityStatus,
     ".radio__form_section .field_message"
   );
   return eligibilityStatus;
@@ -571,38 +516,37 @@ function eligibilityValidationSC(forms = []) {
 // *********************************************
 //              FORM VALIDATION
 // *********************************************
-function validateFormSC(formClassName, dataAssign = true) {
+function validateForm(formClassName, dataAssign = true) {
   const allFields = document.querySelectorAll(
     `.${formClassName} .field__input`
   );
 
-  const yearValidatorSC = (field) =>
-    minValueSC(field, 4, "Please enter a valid year");
+  const yearValidator = (field) =>
+    minValue(field, 4, "Please enter a valid year");
 
-  const dateValidatorSC = (field) =>
-    minValueSC(field, 10, "Please enter a valid date");
+  const dateValidator = (field) =>
+    minValue(field, 10, "Please enter a valid date");
 
-  const zipValidatorSC = (field) =>
-    minValueSC(field, 5, "Please enter a valid Zip code");
+  const zipValidator = (field) =>
+    minValue(field, 5, "Please enter a valid Zip code");
 
   const classAndValidator = [
-    { class: "checkAdult", validator: isAdultSC },
-    { class: "year", validator: yearValidatorSC },
-    { class: "date", validator: dateValidatorSC },
-    { class: "zip", validator: zipValidatorSC },
-    { class: "email", validator: emailValidationSC },
-    { class: "phone", validator: phoneValidationSC },
-    { class: "alphabeticOnly", validator: alphabeticOnlySC },
-    // { class: "SSN", validator: ssnValidatorSC },
-    { class: "businessTaxId", validator: ssnValidatorSC },
-    { class: "requiredxs", validator: isValueEmptySC },
+    { class: "checkAdult", validator: isAdult },
+    { class: "year", validator: yearValidator },
+    { class: "date", validator: dateValidator },
+    { class: "zip", validator: zipValidator },
+    { class: "email", validator: emailValidation },
+    { class: "phone", validator: phoneValidation },
+    { class: "alphabeticOnly", validator: alphabeticOnly },
+    { class: "SSN", validator: ssnValidator },
+    { class: "required", validator: isValueEmpty },
   ];
 
   const checkValidation = [];
 
   allFields.forEach((field) => {
-    // clear formDataSC and validation if field is disabled
-    cleanValueIfDisabledSC(field);
+    // clear formData and validation if field is disabled
+    cleanValueIfDisabled(field);
 
     // validate field by containing class
     classAndValidator.forEach((checker) => {
@@ -616,7 +560,7 @@ function validateFormSC(formClassName, dataAssign = true) {
     const isValueStrNull = String(value).toLocaleLowerCase() == "null";
 
     if (isValueStrNull) {
-      inputErrorMessageSC(field, "Input valid value");
+      inputErrorMessage(field, "Input valid value");
       checkValidation.push(false);
     }
   });
@@ -625,34 +569,31 @@ function validateFormSC(formClassName, dataAssign = true) {
 
   if (isValidate && dataAssign) {
     allFields.forEach((field) => {
-      formDataSC[field?.dataset.scFieldName] = field.value;
+      formData[field?.name] = field.value;
     });
   }
-
   return isValidate;
 }
 
 // MILITARY INFO FROM VALIDATION
-function militaryValidationSC() {
-  const isValidate = validateFormSC("military_information");
+function militaryValidation() {
+  const isValidate = validateForm("military_information");
 
   // Set Name in Multi-step form field
-  const fnameValue = document.querySelector(".eligibilityFirstName")?.dataset
-    .scFieldName;
-  const lnameValue = document.querySelector(".eligibilityLastName")?.dataset
-    .scFieldName;
+  const fnameValue = document.querySelector("#eligibilityFirstName")?.name;
+  const lnameValue = document.querySelector("#eligibilityLastName")?.name;
 
-  const getFirstName = formDataSC[fnameValue] ? formDataSC[fnameValue] : "";
-  const getLastName = formDataSC[lnameValue] ? formDataSC[lnameValue] : "";
+  const getFirstName = formData[fnameValue] ? formData[fnameValue] : "";
+  const getLastName = formData[lnameValue] ? formData[lnameValue] : "";
 
-  document.querySelector(".policyHolderFirstName").value = getFirstName;
-  document.querySelector(".policyHolderLastName").value = getLastName;
+  document.querySelector("#policyHolderFirstName").value = getFirstName;
+  document.querySelector("#policyHolderLastName").value = getLastName;
   return isValidate;
 }
 
 // POLICY HOLDER FORM VALIDATION
-function policyholderValidationSC(step, hasCohabitant = true) {
-  const isValidate = validateFormSC("policyholder_form");
+function policyholderValidation(step, hasCohabitant = true) {
+  const isValidate = validateForm("policyholder_form");
 
   if (isValidate) {
     // SHOW SPOUSE INFORMATION FORM, IF HAVE
@@ -664,21 +605,21 @@ function policyholderValidationSC(step, hasCohabitant = true) {
     if (!hasCohabitant)
       spouseValues = ["Married", "Civil Union Or Domestic Partner"];
 
-    if (spouseValues.includes(formDataSC.policyHolderMaritalStatus)) {
-      if (!formListSC?.includes("spouse_information")) {
-        formListSC?.splice(step + 1, 0, "spouse_information");
+    if (spouseValues.includes(formData.policyHolderMaritalStatus)) {
+      if (!formList?.includes("spouse_information")) {
+        formList?.splice(step + 1, 0, "spouse_information");
       }
     }
 
-    if (!spouseValues.includes(formDataSC.policyHolderMaritalStatus)) {
-      formListSC = formListSC?.filter((form) => form != "spouse_information");
+    if (!spouseValues.includes(formData.policyHolderMaritalStatus)) {
+      formList = formList?.filter((form) => form != "spouse_information");
 
       const spouseField = document.querySelectorAll(
         ".spouse_information .field__input"
       );
 
       spouseField.forEach((field) => {
-        delete formDataSC[field.name];
+        delete formData[field.name];
       });
     }
   }
@@ -689,27 +630,27 @@ function policyholderValidationSC(step, hasCohabitant = true) {
 /********************************************************
  *                   Military SECTION FUNC
  ********************************************************/
-function militaryFormFuncSC() {
+function militaryFormFunc() {
   // Military Rank should be disabled if branchOfService value none
-  const branchOfService = document.getElementsByClassName("branchOfService")[0];
+  const branchOfService = document.getElementById("branchOfService");
 
   if (branchOfService) {
     branchOfService.addEventListener("change", () => {
-      const militaryRank = document.getElementsByClassName("militaryRank")[0];
+      const militaryRank = document.getElementById("militaryRank");
 
       if (Boolean(branchOfService?.value)) {
         militaryRank.disabled = false;
-        militaryRank.classList.add("requiredxs");
+        militaryRank.classList.add("required");
       } else {
         militaryRank.disabled = true;
-        militaryRank.classList.remove("requiredxs");
-        removeErrorOnDisabledSC(militaryRank);
+        militaryRank.classList.remove("required");
+        removeErrorOnDisabled(militaryRank);
       }
 
       // ******************* GET OPTIONS DYNAMICALLY *******************
-      awaitedFieldSC(militaryRank, true);
+      awaitedField(militaryRank, true);
 
-      var selectedtext = $(".branchOfService option:selected").text();
+      var selectedtext = $("#branchOfService option:selected").text();
 
       $.ajax({
         type: "GET",
@@ -718,10 +659,10 @@ function militaryFormFuncSC() {
         contentType: "application/x-www-form-urlencoded; charset=UTF-8",
         data: "{}",
         success: function (data) {
-          let dropdown = $(".militaryRank");
+          let dropdown = $("#militaryRank");
           dropdown.empty();
 
-          $(".militaryRank").append('<option value="">Select Rank</option>');
+          $("#militaryRank").append('<option value="">Select Rank</option>');
           var jsonArray = JSON.parse(data);
           var option;
           for (var i = 0; i < jsonArray.length; i++) {
@@ -731,14 +672,14 @@ function militaryFormFuncSC() {
             militaryRank.add(option);
           }
 
-          awaitedFieldSC(militaryRank, false);
+          awaitedField(militaryRank, false);
         },
       });
     });
   }
 }
 
-function awaitedFieldSC(el, disability) {
+function awaitedField(el, disability) {
   if (disability) {
     el.value = "wait";
     el.disabled = true;
@@ -751,25 +692,24 @@ function awaitedFieldSC(el, disability) {
 // *********************************************
 //      Household Violations FUNCTIONALITY
 // *********************************************
-const addViolationBtnSC =
-  document.getElementsByClassName("add_violation_btn")[0];
-const violationsFieldsSC = document.querySelector(".violation_info_fields");
-const violationWrapperSC = document.getElementsByClassName(
+const addViolationBtn = document.getElementById("add_violation_btn");
+const violationsFields = document.querySelector(".violation_info_fields");
+const violationWrapper = document.getElementById(
   "violation_info_fields_wrapper"
-)[0];
+);
 
-let vioSerialSC = 0;
+let vioSerial = 0;
 
 // ******************* Violation Form Functionality *******************
 // ADD MORE VIOLATIONS FIELDS
-addViolationBtnSC?.addEventListener("click", function () {
-  vioSerialSC++;
+addViolationBtn?.addEventListener("click", function () {
+  vioSerial++;
 
-  const newFields = violationsFieldsSC.cloneNode(true);
+  const newFields = violationsFields.cloneNode(true);
   newFields.querySelectorAll(".field__input").forEach((field) => {
     field.value = "";
 
-    const newId = field.id.replace("0", vioSerialSC);
+    const newId = field.id.replace("0", vioSerial);
     field.id = field.name = newId;
 
     // Driver name alphabetical only
@@ -786,36 +726,36 @@ addViolationBtnSC?.addEventListener("click", function () {
   // for new fields : clearFieldErrorMsg
   newFields.querySelectorAll(".error").forEach((errField) => errField.remove());
 
-  violationWrapperSC?.appendChild(newFields);
+  violationWrapper?.appendChild(newFields);
 
   // Data Validator added
   document
     .querySelectorAll(".householdViolationsDate")
-    .forEach((vDate) => dateValidationSC(vDate, thisYearSC));
+    .forEach((vDate) => dateValidation(vDate, thisYear));
 
-  if (violationWrapperSC?.children.length >= 5) {
+  if (violationWrapper?.children.length >= 5) {
     this.disabled = true;
   }
 
-  removeErrorOnChangeSC();
+  removeErrorOnChange();
 });
 
 // IF householdViolationsPreviousClaims value not== Yes, then disable all
-function disableViolationInputsSC(disable = true) {
-  const violationInputs = violationWrapperSC?.querySelectorAll(".field__input");
+function disableViolationInputs(disable = true) {
+  const violationInputs = violationWrapper?.querySelectorAll(".field__input");
 
   violationInputs?.forEach((input) => (input.disabled = disable));
-  addViolationBtnSC.disabled = disable;
+  addViolationBtn.disabled = disable;
 }
 
-if (addViolationBtnSC && violationWrapperSC) disableViolationInputsSC(true);
+if (addViolationBtn && violationWrapper) disableViolationInputs(true);
 
-const hasviolationsFieldsSC = document.getElementsByName(
+const hasViolationsFields = document.getElementsByName(
   "householdViolationsPreviousClaims"
 );
-const getViolationsValueSC = () => {
+const getViolationsValue = () => {
   let value = "";
-  hasviolationsFieldsSC?.forEach((field) => {
+  hasViolationsFields?.forEach((field) => {
     if (field?.checked) value = field.value;
   });
 
@@ -823,14 +763,14 @@ const getViolationsValueSC = () => {
 };
 
 // Get every violation Radio field's value
-hasviolationsFieldsSC?.forEach((fields) => {
+hasViolationsFields.forEach((fields) => {
   fields?.addEventListener("change", () => {
-    let getValue = getViolationsValueSC();
+    let getValue = getViolationsValue();
 
     if (getValue === "Yes") {
-      disableViolationInputsSC(false);
+      disableViolationInputs(false);
     } else {
-      disableViolationInputsSC(true);
+      disableViolationInputs(true);
     }
 
     let fieldContainer = document.querySelector(".violations__form");
@@ -848,7 +788,7 @@ hasviolationsFieldsSC?.forEach((fields) => {
 
 // ******************* Watercraft and Motorcycle *******************
 
-function violationDriverFuncSC() {
+function violationDriverFunc() {
   const vioDriver = document.querySelectorAll(
     ".select.householdViolationsDriver"
   );
@@ -867,40 +807,40 @@ function violationDriverFuncSC() {
     driverOptionAdd(driverEl, "", "Choose One");
 
     // policyHolder
-    if (formDataSC.policyHolderFirstName)
+    if (formData.policyHolderFirstName)
       driverOptionAdd(
         driverEl,
         "policyHolder",
-        `${formDataSC?.policyHolderFirstName} ${formDataSC?.policyHolderLastName}`
+        `${formData?.policyHolderFirstName} ${formData?.policyHolderLastName}`
       );
     // cohabitant
-    if (formDataSC.cohabitantFirstName)
+    if (formData.cohabitantFirstName)
       driverOptionAdd(
         driverEl,
         "cohabitant",
-        `${formDataSC?.cohabitantFirstName} ${formDataSC?.cohabitantLastName}`
+        `${formData?.cohabitantFirstName} ${formData?.cohabitantLastName}`
       );
 
     // driver 0
-    if (formDataSC.additionalDriver0FirstName)
+    if (formData.additionalDriver0FirstName)
       driverOptionAdd(
         driverEl,
         "additionalDriver0",
-        `${formDataSC?.additionalDriver0FirstName} ${formDataSC?.additionalDriver0LastName}`
+        `${formData?.additionalDriver0FirstName} ${formData?.additionalDriver0LastName}`
       );
     // driver 1
-    if (formDataSC.additionalDriver1FirstName)
+    if (formData.additionalDriver1FirstName)
       driverOptionAdd(
         driverEl,
         "additionalDriver1",
-        `${formDataSC?.additionalDriver1FirstName} ${formDataSC?.additionalDriver1LastName}`
+        `${formData?.additionalDriver1FirstName} ${formData?.additionalDriver1LastName}`
       );
     // driver 2
-    if (formDataSC.additionalDriver2FirstName)
+    if (formData.additionalDriver2FirstName)
       driverOptionAdd(
         driverEl,
         "additionalDriver2",
-        `${formDataSC?.additionalDriver2FirstName} ${formDataSC?.additionalDriver2LastName}`
+        `${formData?.additionalDriver2FirstName} ${formData?.additionalDriver2LastName}`
       );
   });
 }
@@ -908,7 +848,7 @@ function violationDriverFuncSC() {
 // *********************************************
 //               ACCORDION FUNCTIONALITIES
 // *********************************************
-function accordionFuncSC() {
+function accordionFunc() {
   // **** coverageLimitsValidation 'qrf-accordion' Functionality ****
   const accordionButtons = document.querySelectorAll(".qrf-accordion__trigger");
   if (!accordionButtons) return; // safe return to prevent errors
@@ -930,42 +870,40 @@ function accordionFuncSC() {
 //        PROPERTY CLAIMS FUNCTIONALITY
 // *********************************************
 
-function propertyClamsFuncSC() {
-  const propertyClaimsCount = document.getElementsByClassName(
-    "propertyClaimsCount"
-  )[0];
-  const propertyClaimsDetails = document.getElementsByClassName(
+function propertyClamsFunc() {
+  const propertyClaimsCount = document.getElementById("propertyClaimsCount");
+  const propertyClaimsDetails = document.getElementById(
     "propertyClaimsDetails"
-  )[0];
+  );
   if (!propertyClaimsCount || !propertyClaimsDetails) return;
 
   // if (propertyClaimsCount.value == "" || propertyClaimsCount.value == "0") {
   //   propertyClaimsDetails.classList.remove("required");
   //   propertyClaimsDetails.disabled = true;
 
-  //   removeErrorOnDisabledSC(propertyClaimsDetails);
+  //   removeErrorOnDisabled(propertyClaimsDetails);
   // }
 
   propertyClaimsCount.addEventListener("change", (e) => {
     if (e.target.value == "" || e.target.value == "0") {
-      propertyClaimsDetails.classList.remove("requiredxs");
+      propertyClaimsDetails.classList.remove("required");
       propertyClaimsDetails.disabled = true;
-      removeErrorOnDisabledSC(propertyClaimsDetails);
+      removeErrorOnDisabled(propertyClaimsDetails);
     } else {
-      propertyClaimsDetails.classList.add("requiredxs");
+      propertyClaimsDetails.classList.add("required");
       propertyClaimsDetails.disabled = false;
     }
   });
 }
 
 // ******************* Vehicle Built Year Functionality *******************
-function builtYearFunctionalitySC() {
+function builtYearFunctionality() {
   var currentYear = new Date().getFullYear();
 
   // Generate options for the dropdowns
-  var dropdown = $(".propertyYearBuilt");
-  var dropdown_1 = $("select.vehicle0Year");
-  var vehiclePurchased = $("select.vehicle0YearPurchased");
+  var dropdown = $("#propertyYearBuilt");
+  var dropdown_1 = $("select#vehicle0Year");
+  var vehiclePurchased = $("select#vehicle0YearPurchased");
 
   var optionBefore1900 = $("<option></option>")
     .attr("value", "before1900")
@@ -986,50 +924,25 @@ function builtYearFunctionalitySC() {
   vehiclePurchased.append(optionBefore1900.clone());
 }
 
-// clear fields at the page load
-function clearFieldsOnTheBeginning() {
-  const allFields = document.querySelectorAll(".field__input");
-  allFields.forEach((field) => {
-    if (field.type === "checkbox") {
-      field.checked = false;
-    } else {
-      field.value = "";
-    }
-  });
-
-  const radioFields = document.querySelectorAll(".fIeld__radio input");
-  radioFields.forEach((field) => {
-    if (field.type === "radio") {
-      field.checked = false;
-    }
-  });
-}
-
-// Clear the fields only if the page was restored from the cache
-// window.addEventListener("pageshow", () => {
-//   clearFieldsOnTheBeginning();
-// });
-
 window.addEventListener("load", (e) => {
-  propertyClamsFuncSC();
-  removeErrorOnChangeSC();
-  violationDriverFuncSC();
-  accordionFuncSC();
-  createErrorResponseElementSC();
-  currencyFieldFuncSC();
-  removeDollarSC();
-  phoneNumberPatternSC();
-  builtYearFunctionalitySC();
-  addSelectDropdownOptSC();
+  propertyClamsFunc();
+  removeErrorOnChange();
+  removeSSNErrorOnChange();
+  violationDriverFunc();
+  accordionFunc();
+  createErrorResponseElement();
+  currencyFieldFunc();
+  phoneNumberPattern();
+  builtYearFunctionality();
 });
 
 // *********************************************
 //            COMMON STEP 4 FUNCTIONALITIES
 // *********************************************
-function coverageHistoryFuncSC() {
+function coverageHistoryFunc() {
   // if currentInsuranceCompany = "Other" then Insurance Company field will show
-  const insuranceCompany = document.querySelector(".currentInsuranceCompany");
-  const policyRenewalDate = document.querySelector(".policyRenewalDate");
+  const insuranceCompany = document.querySelector("#currentInsuranceCompany");
+  const policyRenewalDate = document.querySelector("#policyRenewalDate");
 
   insuranceCompany?.addEventListener("change", (e) => {
     const insComWrapper = document.querySelector(".insuranceCompany");
@@ -1038,28 +951,27 @@ function coverageHistoryFuncSC() {
     // show insuranceCompany field if select other
     if (e.target.value === "Other") {
       insComWrapper?.classList.remove("conditionally_hidden_field", "__hide");
-      companyName?.classList.add("requiredxs");
+      companyName?.classList.add("required");
     } else {
       insComWrapper?.classList.add("__hide");
-      companyName?.classList.remove("requiredxs");
-      removeErrorOnDisabledSC(companyName);
+      companyName?.classList.remove("required");
+      removeErrorOnDisabled(companyName);
     }
 
     // disable Renewal Date field, if select other none
-    const policyRenewalDate =
-      document.getElementsByClassName("policyRenewalDate")[0];
+    const policyRenewalDate = document.getElementById("policyRenewalDate");
     if (policyRenewalDate)
       policyRenewalDate.disabled = e.target.value === "None";
     if (policyRenewalDate.disabled) {
       policyRenewalDate.classList.remove("date");
-      removeErrorOnDisabledSC(policyRenewalDate);
+      removeErrorOnDisabled(policyRenewalDate);
     }
   });
 
   // STEP 4 - Policy Renewal Data Validation
 
   if (policyRenewalDate) {
-    dateValidationSC(policyRenewalDate, thisYearSC + 2);
+    dateValidation(policyRenewalDate, thisYear + 2);
 
     // if field value has then validate
     policyRenewalDate.addEventListener("input", (e) => {
@@ -1077,25 +989,25 @@ function coverageHistoryFuncSC() {
 /********************************************************
  *                   VEHICLE COMMON FUNCTIONS
  ********************************************************/
-function updateArrToformDataSC(vehiclesArr = []) {
-  vehiclesArr.forEach((info) => (formDataSC = { ...formDataSC, ...info }));
-  if (formDataSC?.vehicleId) delete formDataSC.vehicleId;
-  if (formDataSC?.driverId) delete formDataSC.vehicleId;
+function updateArrToFormData(vehiclesArr = []) {
+  vehiclesArr.forEach((info) => (formData = { ...formData, ...info }));
+  if (formData?.vehicleId) delete formData.vehicleId;
+  if (formData?.driverId) delete formData.vehicleId;
 }
 /********************************************************
  *                   API CALL
  ********************************************************/
 // SAVE FORM DATA
-async function saveDataSC(
+async function saveData(
   url,
-  data = formDataSC,
+  data = formData,
   nextBtn,
   cForm,
   action,
   addressValidType
 ) {
   // clean the payload by removing disabled fields data
-  ActiveFormcleanValueIfDisabledSC(cForm);
+  ActiveFormCleanValueIfDisabled(cForm);
 
   // ********** store all field's id and disabled state **********
   const fieldStates = [];
@@ -1117,7 +1029,7 @@ async function saveDataSC(
 
   // ********** Remove $ Sign form Data **********
 
-  const values = formDataSC; // const values = data;
+  const values = formData; // const values = data;
   let payload = {};
 
   for (const k in values) {
@@ -1198,8 +1110,8 @@ async function saveDataSC(
 
     // QuoteId & QuoteId add after first step
     if (resData.QuoteId && resData.QuoteId) {
-      formDataSC.QuoteId = resData.QuoteId;
-      formDataSC.QuoteKey = resData.QuoteKey;
+      formData.QuoteId = resData.QuoteId;
+      formData.QuoteKey = resData.QuoteKey;
 
       jsonData = resData;
     } else {
@@ -1210,25 +1122,23 @@ async function saveDataSC(
 
     // MemberNumber add after first step
     if (resData?.MemberNumber) {
-      formDataSC.MemberNumber = resData.MemberNumber;
+      formData.MemberNumber = resData.MemberNumber;
     }
 
     // IsStepOne = false after first step
-    if (!formDataSC.IsRecaptchaValid) formDataSC.IsRecaptchaValid = true;
+    if (!formData.IsRecaptchaValid) formData.IsRecaptchaValid = true;
 
     // IsStepOne = false after first step
-    if (formDataSC?.IsStepOne) formDataSC.IsStepOne = false;
+    if (formData?.IsStepOne) formData.IsStepOne = false;
   } catch (error) {
     // RESPONSE ERROR MESSAGE
-    showResponseErrorMessageSC(error?.message);
+    showResponseErrorMessage(error?.message);
     console.log(error);
   } finally {
     // ********** After Process Done restored all fields **********
     // restore fields disability
     fieldStates.forEach((f) => {
-      if (f.id) {
-        document.querySelector(`.${cForm} #${f.id}`).disabled = f.disabled;
-      }
+      document.querySelector(`.${cForm} #${f.id}`).disabled = f.disabled;
     });
 
     nextBtn.disabled = false;
@@ -1237,11 +1147,8 @@ async function saveDataSC(
 
     // clear all fields if submit success
     if (action === "submit" && jsonData?.QuoteId) {
-      // Save Data in the Sitecore then Redirect to Thank you page
-      document.querySelector(".SaveDataSC")?.click();
-
-      // clear fields
       const allFields = document.querySelectorAll(".field__input");
+
       allFields.forEach((field) => {
         if (field.type !== "radio" && field.type !== "checkbox") {
           field.value = "";
@@ -1255,7 +1162,7 @@ async function saveDataSC(
 }
 
 // SHOW ERROR MESSAGE IF ANY ERROR IS OCCUR
-function showResponseErrorMessageSC(
+function showResponseErrorMessage(
   errMsg = "An error occurred. Please try again."
 ) {
   let errorResponse = document.getElementById("error-response");
@@ -1282,7 +1189,7 @@ function showResponseErrorMessageSC(
   // <p id="error-response" class="error-response">Something is wrong.</p> // HTML
 }
 
-function createErrorResponseElementSC() {
+function createErrorResponseElement() {
   let errorResponse = document.getElementById("error-response");
   if (!errorResponse) {
     errorResponse = document.createElement("p");
@@ -1295,12 +1202,12 @@ function createErrorResponseElementSC() {
 /********************************************************
  *                   ASIDE FUNCTIONALITY
  ********************************************************/
-const showAsideBtnSC = document.querySelectorAll(
+const showAsideBtn = document.querySelectorAll(
   ".quote-request-sidebar__show-trigger"
 );
-// const showAsideBtnSC = document.querySelectorAll(".quote-request-sidebar__hide-trigger");
+// const showAsideBtn = document.querySelectorAll(".quote-request-sidebar__hide-trigger");
 
-showAsideBtnSC.forEach((btn) => {
+showAsideBtn.forEach((btn) => {
   btn.addEventListener("click", () => {
     const asideTag = btn
       .closest(".container")
@@ -1325,20 +1232,20 @@ window.addEventListener("load", () => {
   const leadGenPhone = document.querySelector(".sitecore-form-red .maskphone");
   if (leadGenPhone) {
     leadGenPhone.maxLength = 14;
-    phoneNumberPatternSC(leadGenPhone);
+    phoneNumberPattern(leadGenPhone);
   }
 
   // TRIGGER reCaptcha TO GET TOKEN
   const form = document.querySelector(".js-recaptcha-form");
 
   if (form) {
-    const formWithRecaptcha = recaptchaFormSC(form);
+    const formWithRecaptcha = recaptchaForm(form);
     formWithRecaptcha.executeRecaptcha();
   }
 });
 
-// ******************* Token : recaptchaFormSC *******************
-const recaptchaFormSC = function (form) {
+// ******************* Token : recaptchaForm *******************
+const recaptchaForm = function (form) {
   // Declare variables
   let siteKey, action;
 
@@ -1396,7 +1303,7 @@ const recaptchaFormSC = function (form) {
 };
 
 // Submit button functionality
-function btnSubmittingSC(isSubmitting) {
+function btnSubmitting(isSubmitting) {
   const submitBtn = document.querySelector(".js-submit-button");
   if (!submitBtn) return false; // safe return if submitBtn not found
 
@@ -1408,76 +1315,3 @@ function btnSubmittingSC(isSubmitting) {
     submitBtn.disabled = false;
   }
 }
-
-// Eligibility For Insurance: Checked field highlighter & Remove the error msg
-document
-  .querySelectorAll(".radio__form_section .fIeld__radio")
-  ?.forEach((field) => {
-    field.addEventListener("click", () => {
-      const haveCheckClass = document.querySelector(
-        ".radio__form_section .fIeld__radio.checked"
-      );
-
-      const haveError = document.querySelector(
-        ".radio_select .field_message.error"
-      );
-
-      const isChecked = field.querySelector(
-        'input[data-sc-field-name="eligibilityStatus"]:checked'
-      )?.checked;
-
-      if (isChecked) {
-        haveCheckClass?.classList.remove("checked");
-        field?.classList.add("checked");
-
-        haveError?.classList.remove("error");
-      }
-    });
-  });
-
-// Add data-match attribute to the specifice fields
-const policyMail = document.querySelector(
-  ".field__input.policyHolderMailingAddress"
-);
-const policyCity = document.querySelector(".field__input.policyHolderCity");
-const policyState = document.querySelector(".field__input.policyHolderState");
-const policyZip = document.querySelector(".field__input.policyHolderZip");
-policyMail?.setAttribute("data-match", "address");
-policyCity?.setAttribute("data-match", "city");
-policyState?.setAttribute("data-match", "state");
-policyZip?.setAttribute("data-match", "zip");
-
-const prtyAddress = document.querySelector(".field__input.propertyAddress");
-const prtyCity = document.querySelector(".field__input.propertyCity");
-const prtyState = document.querySelector(".field__input.propertyState");
-const prtyZip = document.querySelector(".field__input.propertyZip");
-prtyAddress?.setAttribute("data-match", "address");
-prtyCity?.setAttribute("data-match", "city");
-prtyState?.setAttribute("data-match", "state");
-prtyZip?.setAttribute("data-match", "zip");
-
-// initailly disbled howManyLossesHaveOccurred input field
-const fieldDisabledSC = document.querySelectorAll(".field_disabledSC");
-if (fieldDisabledSC) {
-  fieldDisabledSC.forEach((ele) => {
-    ele.disabled = true;
-  });
-}
-
-// Custom Button added on the SITECORE FROM
-const btnBack = document.createElement("button");
-btnBack.type = "button";
-btnBack.className = "button button__back button__left hide";
-btnBack.textContent = "Back";
-
-const btnNext = document.createElement("button");
-btnNext.type = "button";
-btnNext.className = "button button__next button__right";
-btnNext.textContent = "Next";
-
-const quoteReqBtn = document.querySelector(
-  ".form__section__container .quote_request__action_buttons .container"
-);
-
-quoteReqBtn?.appendChild(btnBack);
-quoteReqBtn?.appendChild(btnNext);
